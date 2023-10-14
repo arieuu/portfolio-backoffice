@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './pages/Login';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,7 +15,10 @@ root.render(
   <React.StrictMode>
 
     <ChakraProvider>
-      <Login />
+
+      {/** Let the router decide what gets rendered */}
+      <RouterProvider router={router} />
+
     </ChakraProvider>
 
   </React.StrictMode>
