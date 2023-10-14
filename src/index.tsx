@@ -7,6 +7,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Login from './pages/Login';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient;
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,9 +18,10 @@ root.render(
   <React.StrictMode>
 
     <ChakraProvider>
-
-      {/** Let the router decide what gets rendered */}
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        {/** Let the router decide what gets rendered */}
+        <RouterProvider router={router} />
+      </QueryClientProvider>
 
     </ChakraProvider>
 
