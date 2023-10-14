@@ -1,5 +1,5 @@
-import { Button, Flex, Input, Spinner, Stack, Text } from "@chakra-ui/react";
-import { FormEvent, useRef, useState } from "react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Flex, Input, Spinner, Stack, Text } from "@chakra-ui/react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import useAuth from "../hooks/useAuth";
 
 
@@ -9,33 +9,45 @@ const Login = () => {
 
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    let username = "";
+    let password = "";
+
+    const [ missingData, setMissingData ] = useState(false);
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if(usernameRef.current && passwordRef.current) {
-            const username = usernameRef.current.value;
-            const password = passwordRef.current.value;
+            username = usernameRef.current.value;
+            password = passwordRef.current.value;
 
             mutate({"username": username, "password": password});
         }
 
+
     }
 
+
     return(
+
         <Flex direction="column" height="100vh" alignItems="center" justifyContent="center">
                 <Text fontSize="5xl" mb="10"> Login </Text> 
-                {data}
 
                 <form onSubmit={ handleSubmit }>
                     <Stack>
 
-                        
-                        <Input ref={ usernameRef } variant="filled" placeholder="Username" size="lg" width="400px" height="60px" focusBorderColor="black"/>
+                        <Input ref={ usernameRef } autoFocus variant="filled" placeholder="Username" size="lg" width="400px" height="60px" focusBorderColor="black"/>
                         <Input ref={ passwordRef } variant="outline" type="password" placeholder="Password" size="lg" width="400px" height="60px" focusBorderColor="black"/>
 
-                        <Button size="lg" type="submit"> { isLoading && <Spinner /> } {!isLoading && <span> Login </span>} </Button>
+                        <Button size="lg" type="submit" isDisabled={isLoading}> Login </Button>
 
+                        { error && <Alert status='error'>
+                        <AlertIcon />
+
+                        <AlertTitle> {error.message} </AlertTitle>
+
+                        </Alert>
+                        }
                     </Stack>
                 </form>
 
