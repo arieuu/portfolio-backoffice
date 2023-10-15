@@ -2,12 +2,13 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Text } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
 
 const App = () => {
 
   return(
     <>
-      <Text fontSize="5xl">Hellow world</Text> 
+      <Outlet />
     </>
   )
 

@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Flex, Input, Spinner, Stack, Text } from "@chakra-ui/react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import useAuth from "../hooks/useAuth";
-
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
@@ -12,7 +12,6 @@ const Login = () => {
     let username = "";
     let password = "";
 
-    const [ missingData, setMissingData ] = useState(false);
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -26,7 +25,6 @@ const Login = () => {
 
 
     }
-
 
     return(
 
