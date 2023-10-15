@@ -2,6 +2,7 @@ import axios, { AxiosStatic } from "axios"
 import { error } from "console";
 import { useMutation } from "react-query"
 import { redirect, useNavigate } from "react-router-dom";
+import axiosInstance from "../services/axiosInstance";
 
 interface Ilogin {
     username: string,
@@ -22,7 +23,7 @@ const useAuth = () => {
 
     const mutation = useMutation<string, IError, Ilogin>({
         mutationFn: (login:Ilogin) => {
-        return axios.post("http://localhost:3000/api/v1/session", login)
+        return axiosInstance.post("/session", login)
                     .then(res => res.data)
        },
 
