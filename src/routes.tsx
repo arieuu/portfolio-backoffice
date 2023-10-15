@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import { useState } from "react";
-import MainPage from "./pages/MainPage";
+import PrivateRoutes from "./pages/PrivateRoutes";
 
 
 const router = createBrowserRouter([
@@ -9,9 +9,15 @@ const router = createBrowserRouter([
         path: "/",
         element: <Login />,
     },
+
     {
-        path: "/dashboard",
-        element: <MainPage />
+        element: <PrivateRoutes />,
+        children: [
+            {
+                path: "/dashboard",
+                element: <Dashboard/>
+            }
+        ]
     }
 ]);
 

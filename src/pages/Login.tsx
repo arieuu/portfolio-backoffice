@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import useAuth from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const schema = z.object({
     username: z.string().min(4, {message: "Username too short"}),
@@ -10,7 +11,6 @@ const schema = z.object({
 });
 
 // Getting object shape from our created zod schema object
-
 type SchemaShape = z.infer<typeof schema>;
 
 const Login = () => {
@@ -29,7 +29,6 @@ const Login = () => {
         const password = data.password;
 
         mutate({"username": username, "password": password});
-        console.log("her")
 
     }
 
@@ -38,7 +37,6 @@ const Login = () => {
 
         <Flex direction="column" height="100vh" alignItems="center" justifyContent="center">
                 <Text fontSize="5xl" mb="10"> Login </Text> 
-
                 <form onSubmit={ handleSubmit(onSubmit)}>
 
                     <Stack>

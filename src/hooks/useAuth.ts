@@ -22,7 +22,7 @@ const useAuth = () => {
     // The generic typing: what we get, error object, what we send
 
     const mutation = useMutation<string, IError, Ilogin>({
-        mutationFn: (login:Ilogin) => {
+        mutationFn: (login: Ilogin) => {
         return axiosInstance.post("/session", login)
                     .then(res => res.data)
        },
