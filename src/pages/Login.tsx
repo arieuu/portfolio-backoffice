@@ -1,52 +1,74 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Flex, Input, Spinner, Stack, Text } from "@chakra-ui/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { Alert, AlertIcon, AlertTitle, Button, Flex, Input, Stack, Text } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 import useAuth from "../hooks/useAuth";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+
+const schema = z.object({
+    username: z.string().min(4, {message: "Username too short"}),
+    password: z.string().min(4, {message: "Password too short"})
+});
+
+// Getting object shape from our created zod schema object
+
+type SchemaShape = z.infer<typeof schema>;
 
 const Login = () => {
 
-    const { mutate, data, isLoading, error} = useAuth();
+    const { register, handleSubmit, formState: { errors }} = useForm<SchemaShape>({ resolver: zodResolver(schema)});
+    const { mutate, isLoading, error} = useAuth();
 
-    const usernameRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
-    let username = "";
-    let password = "";
+    const onSubmit: SubmitHandler<SchemaShape> = (data) => {
 
+        /* We don't even need to prevent form default behaviour.
+           We Also don't need to check if the data has been received because
+           the form won't submit until everything has been validated
+        */
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        const username = data.username;
+        const password = data.password;
 
-        if(usernameRef.current && passwordRef.current) {
-            username = usernameRef.current.value;
-            password = passwordRef.current.value;
-
-            mutate({"username": username, "password": password});
-        }
-
+        mutate({"username": username, "password": password});
+        console.log("her")
 
     }
+
 
     return(
 
         <Flex direction="column" height="100vh" alignItems="center" justifyContent="center">
                 <Text fontSize="5xl" mb="10"> Login </Text> 
 
-                <form onSubmit={ handleSubmit }>
+                <form onSubmit={ handleSubmit(onSubmit)}>
+
                     <Stack>
 
-                        <Input ref={ usernameRef } autoFocus variant="filled" placeholder="Username" size="lg" width="400px" height="60px" focusBorderColor="black"/>
-                        <Input ref={ passwordRef } variant="outline" type="password" placeholder="Password" size="lg" width="400px" height="60px" focusBorderColor="black"/>
+                        <Input id="username" {...register("username")} autoFocus variant="filled" placeholder="Username" size="lg" width="400px" height="60px" focusBorderColor="black"/>
+
+                            { (errors.username ) && <Alert status='error'>
+                                <AlertIcon />
+                                <AlertTitle> {errors.username?.message}</AlertTitle>
+                                </Alert>
+                            }
+
+                        <Input id="password" {...register("password")} variant="outline" type="password" placeholder="Password" size="lg" width="400px" height="60px" focusBorderColor="black"/>
+
+                            { (errors.password) && <Alert status='error'>
+                                <AlertIcon />
+                                <AlertTitle> {errors.password?.message}</AlertTitle>
+                                </Alert>
+                            }
 
                         <Button size="lg" type="submit" isDisabled={isLoading}> Login </Button>
 
-                        { error && <Alert status='error'>
-                        <AlertIcon />
-
-                        <AlertTitle> {error.message} </AlertTitle>
-
-                        </Alert>
+                        { (error) && <Alert status='error'>
+                            <AlertIcon />
+                            <AlertTitle> {error?.message} </AlertTitle>
+                            </Alert>
                         }
+
                     </Stack>
+
                 </form>
 
         </Flex>
