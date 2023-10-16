@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, Button, Flex, Input, Stack, Text } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Button, Flex, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,7 +36,7 @@ const Login = () => {
     return(
 
         <Flex direction="column" height="100vh" alignItems="center" justifyContent="center">
-                <Text fontSize="5xl" mb="10"> Login </Text> 
+                <Heading fontSize="6xl" mb="10"> Login </Heading>
                 <form onSubmit={ handleSubmit(onSubmit)}>
 
                     <Stack>

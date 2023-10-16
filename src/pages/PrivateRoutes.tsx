@@ -24,7 +24,7 @@ const PrivateRoutes = () => {
 
             {error && <Navigate to="/"/>}
 
-            { !isLoading && <Outlet />}
+            { !isLoading && !error && <Outlet />}
         </>
     )
 

@@ -37,7 +37,7 @@ const useAuth = () => {
         // When successfuly logged in save the received token to local storage and redirect to dashboard
 
         localStorage.setItem("loginToken", token);
-        navigate("/dashboard");
+        navigate("/dashboard/");
        }
     });
 
