@@ -16,6 +16,7 @@ const ListData = () => {
 
             {isLoading && <Spinner /> }
 
+
             {data?.map((looseData) => {
                 return (<Card key={looseData.dataId}>
                             <CardHeader>
@@ -31,7 +32,7 @@ const ListData = () => {
                             </CardBody>
 
                             <CardFooter>
-                                <Button as={Link} to={"data/create/" + looseData.dataId}> Edit item </Button>
+                                <Button as={Link} to={"create/" + looseData.type}> Edit item </Button>
                             </CardFooter>
                         </Card>)})}
 

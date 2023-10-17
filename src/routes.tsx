@@ -29,7 +29,7 @@ const router = createBrowserRouter([
                         element: <ListData />
                     },
                     {
-                        path: "data/create",
+                        path: "data/create/:dataTypeParam?",
                         element: <CreateData />
                     }
                 ]

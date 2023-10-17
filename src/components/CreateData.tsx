@@ -1,8 +1,11 @@
 import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, Spinner, Textarea, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { string, z } from "zod";
+import { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { z } from "zod";
 import useCreateLooseData from "../hooks/useCreateLooseData";
+import useGetOneLooseData from "../hooks/useGetOneLooseData";
 
 const schema = z.object({
     type: z.string().min(4, {message: "Type too short"}),
@@ -15,18 +18,30 @@ const schema = z.object({
 
 type SchemaShape = z.infer<typeof schema>;
 
+
+/**
+ * This component serves both to create data and to edit, it morphes depending if there's a parameter in the url.
+ * 
+ * If there is a url param a specific hook is used to get a single loose data by that type, if not we just create a new one
+ */
+
 const CreateData = () => {
 
-    const { register, handleSubmit, formState: { errors }} = useForm<SchemaShape>({ resolver: zodResolver(schema)});
+    const { register, handleSubmit, formState: { errors }, setValue} = useForm<SchemaShape>({ resolver: zodResolver(schema)});
     const toast = useToast();
+
+    const { dataTypeParam } = useParams();
+
+    const { data: paramData, isLoading: isParamLoading } = useGetOneLooseData(dataTypeParam);
+    
 
 
     const onSuccess = () => {
         return toast({
-          title: 'Data created.',
-          description: "The loose data has been persisted to the database",
+          title: 'Data persisted.',
+          description: "The data has been successfuly persisted to the database",
           status: 'success',
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         })
     }
@@ -41,20 +56,48 @@ const CreateData = () => {
             extraContent: data.extra
         }
 
-        mutate(looseData)
+        mutate(looseData);
+
+        // After a successful submission we clean up all the inputs to avoid re-sending of the data and user experience
+
+        setValue("type", "")
+        setValue("title", "")
+        setValue("content", "")
+        setValue("extra", "")
+
+        // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
+
+        if (paramData) paramData.title = ""
+        if (paramData) paramData.type = ""
+        if (paramData) paramData.content = ""
+        if (paramData?.extraContent) paramData.extraContent = ""
 
     }
 
+    useEffect(() => {
+
+        // If there's a paramete in the url then we are editing data, so we set all the inputs with the needed data
+
+        if(paramData) {
+            setValue("type", paramData?.type)
+            setValue("title", paramData?.title)
+            setValue("content", paramData?.content)
+
+            // This field is optional
+
+            if(paramData.extraContent) setValue("extra", paramData?.extraContent)
+        }
+    })
 
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
-            <Heading mb={"24"}> Create data </Heading>
+            { dataTypeParam ? <Heading mb={"24"}> Edit data </Heading> : <Heading mb={"24"}> Create data </Heading> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
 
                 <FormLabel>Data type</FormLabel>
-                <Input id="type" {...register("type")}  type='text' placeholder="Insert data type" border="1px black solid" mb={7} autoFocus/>
+                <Input id="type" {...register("type")} type='text' placeholder="Insert data type" border="1px black solid" mb={7} autoFocus/>
 
                 { (errors.type) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.type?.message}</AlertTitle> </Alert> }
 

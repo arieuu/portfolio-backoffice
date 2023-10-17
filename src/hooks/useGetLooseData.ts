@@ -6,6 +6,7 @@ import { ILooseData } from "../types/main";
 
 
 const useGetLooseData = () => {
+
     const query = useQuery({
         queryKey: ["looseDate"],
 
