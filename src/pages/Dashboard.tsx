@@ -36,7 +36,7 @@ const Dashboard = () => {
 
                 <Heading mb="8" mt="8" fontSize={"2xl"}> Extras </Heading>
                 <Stack width="80%">
-                    <Button colorScheme="red" variant="outline"> Logout </Button>
+                    <Button as={NavLink} to="/" colorScheme="red" variant="outline" onClick={() => localStorage.setItem("loginToken", "")}> Logout </Button>
                 </Stack>
                 {/*
                     side 1

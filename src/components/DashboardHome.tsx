@@ -1,8 +1,12 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, SimpleGrid, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import useGetLooseData from "../hooks/useGetLooseData";
 
 
 const DashboardHome = () => {
+
+    const { isLoading, data } = useGetLooseData();
+
     return (
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8}>
             <Heading mb={"24"}> Dashboard </Heading>
@@ -26,9 +30,12 @@ const DashboardHome = () => {
                     <CardHeader>
                         <Heading size='xl'>Loose data </Heading>
                     </CardHeader>
+
                     <CardBody>
-                        <Text> There are <strong> 12 </strong> editable pieces of data currently listed in your portfolio. </Text>
+                        { isLoading && <Spinner /> }
+                        <Text> There are <strong> {data?.length} </strong> editable pieces of loose data currently listed in your portfolio. </Text>
                     </CardBody>
+
                     <CardFooter>
                         <Button as={Link} to="data"> View items </Button>
                     </CardFooter>
