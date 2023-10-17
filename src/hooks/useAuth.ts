@@ -3,6 +3,7 @@ import { error } from "console";
 import { useMutation } from "react-query"
 import { redirect, useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
+import { IError } from "../types/main";
 
 interface Ilogin {
     username: string,
@@ -11,9 +12,7 @@ interface Ilogin {
 
 // Custom error object with status codes
 
-interface IError extends Error {
-    response?: { status: number }
-}
+
 
 const useAuth = () => {
 

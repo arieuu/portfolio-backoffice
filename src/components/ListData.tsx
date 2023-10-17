@@ -7,7 +7,6 @@ const ListData = () => {
 
     const {isLoading, data}= useGetLooseData();
 
-
     return (
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8}>
             <Heading mb={"24"}> Loose data </Heading>

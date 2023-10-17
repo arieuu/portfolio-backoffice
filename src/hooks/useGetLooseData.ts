@@ -1,15 +1,9 @@
 import { useQuery } from "react-query"
 import axiosInstance from "../services/axiosInstance"
+import { ILooseData } from "../types/main";
 
 // Custom hook to get all loose data
 
-interface ILooseData {
-    dataId: string,
-    type: string,
-    title: string,
-    content: string,
-    extraContent?: string,
-}
 
 const useGetLooseData = () => {
     const query = useQuery({
