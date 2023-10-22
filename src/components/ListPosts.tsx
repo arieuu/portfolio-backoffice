@@ -1,6 +1,7 @@
 import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, SimpleGrid, Stack, Text, useToast } from "@chakra-ui/react";
 import useDeletePost from "../hooks/useDeletePost";
 import useGetPosts from "../hooks/useGetPosts";
+import useEditPostPartially  from "../hooks/useEditPostPartially";
 
 
 const ListPosts = () => {
@@ -11,7 +12,7 @@ const ListPosts = () => {
 
     // We'll show a toas message on success
 
-    const onSuccess = () => {
+    const onDeletionSuccess = () => {
         return toast({
           title: 'Post deleted.',
           description: "The post has been removed from the database",
@@ -21,7 +22,18 @@ const ListPosts = () => {
         })
     }
 
-    const { isLoading: isDeleteLoading, isError: isDeleteError, mutate } = useDeletePost(onSuccess);
+    const onVisibilitySuccess = () => {
+        return toast({
+          title: 'Visibility edited successfuly.',
+          description: "Post visibility has been toggled",
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+    }
+
+    const { isLoading: isDeleteLoading, isError: isDeleteError, mutate } = useDeletePost(onDeletionSuccess);
+    const { mutate: mutatePost } = useEditPostPartially(onVisibilitySuccess)
 
     // Delete a post by id
 
@@ -73,12 +85,16 @@ const ListPosts = () => {
                                 Delete
                             </Button>
 
-                            <Button variant='outline' colorScheme='red'>
-                                Hide 
+                            <Button variant='outline' colorScheme='yellow' onClick={() => {
+                                mutatePost({postId: post.postId, isHidden: !post.isHidden, isFirstPage: post.isFirstPage});
+                            }}>
+                                {post.isHidden == true ? <Text> Hidden </Text> : <Text> Hide </Text>}
                             </Button>
 
-                            <Button variant='outline' colorScheme='green'>
-                                Show first page 
+                            <Button variant='outline' colorScheme='green' onClick={() => {
+                                mutatePost({postId: post.postId, isHidden: post.isHidden, isFirstPage: !post.isFirstPage})
+                            }}>
+                                { post.isFirstPage == true ? <Text> Not first page </Text> : <Text> First page </Text> }
                             </Button>
                         </ButtonGroup>
 
