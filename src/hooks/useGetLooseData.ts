@@ -4,11 +4,10 @@ import { ILooseData } from "../types/main";
 
 // Custom hook to get all loose data
 
-
 const useGetLooseData = () => {
 
     const query = useQuery({
-        queryKey: ["looseDate"],
+        queryKey: ["looseData"],
 
         queryFn: () => {
             return axiosInstance.get<ILooseData[]>("/data")

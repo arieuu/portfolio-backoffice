@@ -10,3 +10,23 @@ export interface ILooseData {
     content: string,
     extraContent?: string
 }
+
+export interface IExtraLink {
+    linkId: string,
+    link: string,
+    linkText: string,
+}
+
+export interface IPost {
+    postId: string,
+    title: string,
+    year: string,
+    description: string,
+    more: string,
+    link: string,
+    tools: string,
+    isFirstPage: boolean,
+    isHidden: boolean,
+    imageUrl: string,
+    extraLinks: IExtraLink[]
+}

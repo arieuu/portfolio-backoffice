@@ -1,11 +1,13 @@
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import useGetLooseData from "../hooks/useGetLooseData";
+import useGetPosts from "../hooks/useGetPosts";
 
 
 const DashboardHome = () => {
 
     const { isLoading, data } = useGetLooseData();
+    const { isLoading: isPostsLoading, data: postsData } = useGetPosts();
 
     return (
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8}>
@@ -18,7 +20,7 @@ const DashboardHome = () => {
                         <Heading size='xl'>Posts</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Text> There are <strong> 8 </strong> posts currently listed in your portfolio. </Text>
+                        <Text> There are <strong> { postsData?.length } </strong> posts currently listed in your portfolio. </Text>
                     </CardBody>
                     <CardFooter>
                         <Button as={Link} to="data"> View items </Button>
@@ -26,7 +28,7 @@ const DashboardHome = () => {
                 </Card>
 
 
-                <Card>
+                <Card >
                     <CardHeader>
                         <Heading size='xl'>Loose data </Heading>
                     </CardHeader>

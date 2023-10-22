@@ -5,6 +5,7 @@ import PrivateRoutes from "./pages/PrivateRoutes";
 import DashboardHome from "./components/DashboardHome";
 import CreateData from "./components/CreateData";
 import ListData from "./components/ListData";
+import ListPosts from "./components/ListPosts";
 
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
                     {
                         path: "data/create/:dataTypeParam?",
                         element: <CreateData />
+                    },
+                    {
+                        path: "posts",
+                        element: <ListPosts />
                     }
                 ]
             }
