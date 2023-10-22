@@ -1,20 +1,40 @@
-import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, Image, SimpleGrid, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, SimpleGrid, Stack, Text, useToast } from "@chakra-ui/react";
+import useDeletePost from "../hooks/useDeletePost";
 import useGetPosts from "../hooks/useGetPosts";
-import useGetOnePost from "../hooks/useGetOnePost";
 
 
 const ListPosts = () => {
 
     const { isLoading, isError, data } = useGetPosts();
     const baseImgUrl = "localhost:3000/"
-    // const {isLoading, isError, data } = useGetOnePost("82d5d3c0-950b-4d26-8775-6e3ddf55c404");
+    const toast = useToast();
+
+    // We'll show a toas message on success
+
+    const onSuccess = () => {
+        return toast({
+          title: 'Post deleted.',
+          description: "The post has been removed from the database",
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+    }
+
+    const { isLoading: isDeleteLoading, isError: isDeleteError, mutate } = useDeletePost(onSuccess);
+
+    // Delete a post by id
+
+    const deletePost = (postId: string) => {
+        mutate(postId);
+    }
 
     return (
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8}>
 
             <Heading mb={"24"}> Posts </Heading>
 
-            <SimpleGrid columns={3} spacing="5">
+            <SimpleGrid columns={2} spacing="5">
 
                 {data?.map(post => {
                 return <Card minW='md' key={post.postId}>
@@ -49,7 +69,7 @@ const ListPosts = () => {
                                 Edit post 
                             </Button>
 
-                            <Button variant='solid' colorScheme='red'>
+                            <Button variant='solid' colorScheme='red' onClick={() => deletePost(post.postId)}>
                                 Delete
                             </Button>
 

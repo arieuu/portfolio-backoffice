@@ -6,7 +6,7 @@ import { IPost } from "../types/main";
 const useGetPosts = () => {
 
     const query = useQuery({
-        queryKey: ["Posts"],
+        queryKey: ["posts"],
         queryFn: () => {
             return axiosInstance.get<IPost[]>("/post")
             .then(res => res.data)
