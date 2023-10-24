@@ -7,9 +7,9 @@ import { color } from "framer-motion";
 const Dashboard = () => {
     
     return (
-        <Flex maxWidth="80%" marginX="auto" height="100vh" alignItems="center" gap={10}>
+        <Flex maxWidth="80%" marginX="auto" height="100vh" alignItems="start" paddingTop="14" gap={10}>
             
-            <Box  width="20%"  height="90%" alignItems="center" display="flex" flexDirection="column" backgroundColor="gray.100">
+            <Box  width="20%" paddingBottom=""  minHeight="90%" alignItems="center" display="flex" flexDirection="column" backgroundColor="gray.100">
 
                 <Heading mb="8" mt="8"> Menu </Heading>
 
@@ -46,7 +46,7 @@ const Dashboard = () => {
 
 
 
-            <Box width="100%" minHeight="90%" backgroundColor={"gray.100"}>
+            <Box width="100%" minHeight={"90%"} backgroundColor={"gray.100"}>
                 <Outlet />
             </Box>
 
