@@ -3,7 +3,7 @@ import axiosInstance from "../services/axiosInstance";
 import { IError, IPost } from "../types/main";
 import { useNavigate } from "react-router-dom";
 
-const useEditPostPartially = (onSuccess: () => void) => {
+const useEditPostPartially = (onSuccess: () => void, state: () => void) => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -21,9 +21,15 @@ const useEditPostPartially = (onSuccess: () => void) => {
                 navigate("/");
                 localStorage.setItem("loginToken", "");
             }
+
+            // In case we get an error we change state back to what it was, rolling back the optimistic update
+
+            state();
+
         },
 
-        onSuccess: onSuccess
+        onSuccess: onSuccess,
+        
     })
 
     return mutation;

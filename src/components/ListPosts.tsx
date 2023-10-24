@@ -2,6 +2,7 @@ import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading
 import useDeletePost from "../hooks/useDeletePost";
 import useGetPosts from "../hooks/useGetPosts";
 import useEditPostPartially  from "../hooks/useEditPostPartially";
+import { useEffect, useState } from "react";
 
 
 const ListPosts = () => {
@@ -9,6 +10,27 @@ const ListPosts = () => {
     const { isLoading, isError, data } = useGetPosts();
     const baseImgUrl = "localhost:3000/"
     const toast = useToast();
+
+    // Variables for button optimistic updates
+
+    const [display, setDisplay] = useState<boolean[]>([]);
+
+    /* We get the data from the database and fill up a state array with all the booleans saying whether a post
+       is hidden or not. We use this state to change the button values immediately (optimistic update) to give the
+       user a better experience.
+
+       The buttons will check the state variables instead of the data itself coming from the database. That way we
+       can update things immediately  */
+
+    if(display.length < (data?.length ?? 0)) {
+        const hiddenValuesArray: boolean[] = [];
+        data?.map((post) => (hiddenValuesArray.push(post.isHidden)))
+        setDisplay(hiddenValuesArray)
+    }
+
+    // Saving the original array as a backup, we'll use this to restore the UI state in case anything goes wrong(revert the update to ui)
+
+    const originalHiddenValuesArray = display;
 
     // We'll show a toas message on success
 
@@ -33,7 +55,14 @@ const ListPosts = () => {
     }
 
     const { isLoading: isDeleteLoading, isError: isDeleteError, mutate } = useDeletePost(onDeletionSuccess);
-    const { mutate: mutatePost } = useEditPostPartially(onVisibilitySuccess)
+
+    // This is a callback changing the state uppon error of the mutation to hidden posts value, changing the state will change the button value
+
+    const onHideError = () => {
+        setDisplay(originalHiddenValuesArray)
+    }
+
+    const { mutate: mutatePost, isError: isMutatePostError } = useEditPostPartially(onVisibilitySuccess, onHideError)
 
     // Delete a post by id
 
@@ -48,7 +77,8 @@ const ListPosts = () => {
 
             <SimpleGrid columns={2} spacing="5">
 
-                {data?.map(post => {
+                {data?.map((post, index) => {
+
                 return <Card minW='md' key={post.postId}>
                     <CardBody>
                         <Image
@@ -85,16 +115,40 @@ const ListPosts = () => {
                                 Delete
                             </Button>
 
+
+
+                            
                             <Button variant='outline' colorScheme='yellow' onClick={() => {
+
+                                // We change the state array at the location of the button being clicked, the rest stays the same
+
+                                const emptyHiddenValuesArray = []; 
+
+                                for(let i = 0; i < display.length; i++) {
+                                    if(i == index) emptyHiddenValuesArray.push(!display[i])
+                                    else if (i != index) emptyHiddenValuesArray.push(display[i])
+                                }
+
+                                // We then do the optimistic update by changing the button text, showing the result before actually mutating the data.
+                                // The mutation hook will take care of reverting the update to the UI if anything goes wrong
+
+                                setDisplay(emptyHiddenValuesArray)
+
                                 mutatePost({postId: post.postId, isHidden: !post.isHidden, isFirstPage: post.isFirstPage});
+                                
                             }}>
-                                {post.isHidden == true ? <Text> Hidden </Text> : <Text> Hide </Text>}
+
+                                { display[index] == true ? <Text> Show </Text> : <Text> Hide </Text>}
+
                             </Button>
+
+
+
 
                             <Button variant='outline' colorScheme='green' onClick={() => {
                                 mutatePost({postId: post.postId, isHidden: post.isHidden, isFirstPage: !post.isFirstPage})
                             }}>
-                                { post.isFirstPage == true ? <Text> Not first page </Text> : <Text> First page </Text> }
+                                { post.isFirstPage == true ? <Text> Normalize </Text> : <Text> Highlight </Text> }
                             </Button>
                         </ButtonGroup>
 
