@@ -14,23 +14,38 @@ const ListPosts = () => {
     // Variables for button optimistic updates
 
     const [display, setDisplay] = useState<boolean[]>([]);
+    const [firstPage, setFirstPage] = useState<boolean[]>([]);
 
-    /* We get the data from the database and fill up a state array with all the booleans saying whether a post
+    /* 
+       We get the data from the database and fill up a state array with all the booleans saying whether a post
        is hidden or not. We use this state to change the button values immediately (optimistic update) to give the
        user a better experience.
 
        The buttons will check the state variables instead of the data itself coming from the database. That way we
-       can update things immediately  */
+       can update things immediately  
+    */
 
-    if(display.length < (data?.length ?? 0)) {
-        const hiddenValuesArray: boolean[] = [];
-        data?.map((post) => (hiddenValuesArray.push(post.isHidden)))
-        setDisplay(hiddenValuesArray)
+    if (display.length < (data?.length ?? 0)) {
+        const isHiddenValuesArray: boolean[] = [];
+
+        data?.map((post) => (isHiddenValuesArray.push(post.isHidden)));
+
+        setDisplay(isHiddenValuesArray);
+    }
+
+
+    if (display.length < (data?.length ?? 0)) {
+        const isFirstPageValuesArray: boolean[] = [];
+
+        data?.map((post) => isFirstPageValuesArray.push(post.isFirstPage));
+
+        setFirstPage(isFirstPageValuesArray);
     }
 
     // Saving the original array as a backup, we'll use this to restore the UI state in case anything goes wrong(revert the update to ui)
 
-    const originalHiddenValuesArray = display;
+    const originalIsHiddenValuesArray = display;
+    const originalIsFirstPageArray = firstPage;
 
     // We'll show a toas message on success
 
@@ -44,7 +59,7 @@ const ListPosts = () => {
         })
     }
 
-    const onVisibilitySuccess = () => {
+    const onEditSuccess = () => {
         return toast({
           title: 'Visibility edited successfuly.',
           description: "Post visibility has been toggled",
@@ -56,13 +71,17 @@ const ListPosts = () => {
 
     const { isLoading: isDeleteLoading, isError: isDeleteError, mutate } = useDeletePost(onDeletionSuccess);
 
-    // This is a callback changing the state uppon error of the mutation to hidden posts value, changing the state will change the button value
+    // This is a callback changing the state uppon error of the mutation to hidde posts value, changing the state will change the button value
 
-    const onHideError = () => {
-        setDisplay(originalHiddenValuesArray)
+    const onEditError = () => {
+
+        // Set all button values to their original state
+
+        setDisplay(originalIsHiddenValuesArray);
+        setFirstPage(originalIsFirstPageArray);
     }
 
-    const { mutate: mutatePost, isError: isMutatePostError } = useEditPostPartially(onVisibilitySuccess, onHideError)
+    const { mutate: mutatePost, isError: isMutatePostError } = useEditPostPartially(onEditSuccess, onEditError)
 
     // Delete a post by id
 
@@ -115,9 +134,8 @@ const ListPosts = () => {
                                 Delete
                             </Button>
 
-
-
                             
+
                             <Button variant='outline' colorScheme='yellow' onClick={() => {
 
                                 // We change the state array at the location of the button being clicked, the rest stays the same
@@ -125,14 +143,14 @@ const ListPosts = () => {
                                 const emptyHiddenValuesArray = []; 
 
                                 for(let i = 0; i < display.length; i++) {
-                                    if(i == index) emptyHiddenValuesArray.push(!display[i])
-                                    else if (i != index) emptyHiddenValuesArray.push(display[i])
+                                    if(i == index) emptyHiddenValuesArray.push(!display[i]);
+                                    else if (i != index) emptyHiddenValuesArray.push(display[i]);
                                 }
 
-                                // We then do the optimistic update by changing the button text, showing the result before actually mutating the data.
-                                // The mutation hook will take care of reverting the update to the UI if anything goes wrong
+                                /* We then do the optimistic update by changing the button text, showing the result before actually mutating the data.
+                                 The mutation hook will take care of reverting the update to the UI if anything goes wrong */
 
-                                setDisplay(emptyHiddenValuesArray)
+                                setDisplay(emptyHiddenValuesArray);
 
                                 mutatePost({postId: post.postId, isHidden: !post.isHidden, isFirstPage: post.isFirstPage});
                                 
@@ -144,11 +162,20 @@ const ListPosts = () => {
 
 
 
-
                             <Button variant='outline' colorScheme='green' onClick={() => {
+
+                                const emptyIsFirstPageArray = [];
+
+                                for(let i = 0; i < firstPage.length; i++) {
+                                    if(i == index) emptyIsFirstPageArray.push(!firstPage[i]);
+                                    else if(i != index) emptyIsFirstPageArray.push(firstPage[i])
+                                }
+
+                                setFirstPage(emptyIsFirstPageArray);
+
                                 mutatePost({postId: post.postId, isHidden: post.isHidden, isFirstPage: !post.isFirstPage})
                             }}>
-                                { post.isFirstPage == true ? <Text> Normalize </Text> : <Text> Highlight </Text> }
+                                { firstPage[index] == true ? <Text> Normalize </Text> : <Text> Highlight </Text> }
                             </Button>
                         </ButtonGroup>
 
