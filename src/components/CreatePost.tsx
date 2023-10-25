@@ -5,6 +5,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
 import useGetOneLooseData from "../hooks/useGetOneLooseData";
+import useCreatePost from "../hooks/useCreatePost";
+import { IExtraLink, IPost } from "../types/main";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -39,11 +41,6 @@ const schema = z.object({
 type SchemaShape = z.infer<typeof schema>;
 
 
-interface IExtraLink {
-    linkText: string
-    link: string,
-}
-
 /**
  * This component serves both to create data and to edit, it morphes depending if there's a parameter in the url.
  * 
@@ -61,6 +58,7 @@ const CreatePost = () => {
 
     const [quantityExtraLinks, setQuantityExtraLinks] = useState(0)
     const [extraLinks, setExtraLinks] = useState<IExtraLink[]>([])
+
     
     // EDITING MODE 
 
@@ -75,6 +73,8 @@ const CreatePost = () => {
           isClosable: true,
         })
     }
+
+    const { isLoading: isLoadingCreatePost, isError: isErrorCreatePost, data: dataCreatedPost, mutate } = useCreatePost(onSuccess);
 
     const setExtralinkState = (index: number, linkText?: string, link?: string) => {
         const newExtraLinks: IExtraLink[] = [];
@@ -101,6 +101,7 @@ const CreatePost = () => {
         setExtraLinks(newExtraLinks);
     }
 
+
     const onSubmit: SubmitHandler<SchemaShape> = (data) => {
 
         const finalExtraLinksArray: IExtraLink[] = [];
@@ -109,21 +110,23 @@ const CreatePost = () => {
             if(extraLink.linkText != "") finalExtraLinksArray.push(extraLink)
         });
         
-        const postData = {
+        const postData: IPost = {
+            postId: "",
             title: data.title,
             year: data.year,
             description: data.description,
             more: data.more,
             link: data.link,
             tools: data.tools,
-            isFirstPage: data.isFirstPage,
-            isHidden: data.isHidden,
+            isFirstPage: Boolean(data.isFirstPage),
+            isHidden: Boolean(data.isHidden),
+            projectImage: data.projectImage[0],     // This propriety needs to be same name as multer's upload.single to work
             extraLinks: finalExtraLinksArray,
-            projectImage: data.projectImage
         }
 
         console.log(postData);
 
+        mutate(postData);
         // Clean state after successful submit
 
         // setValue("extraLinkText0", "text")
@@ -160,8 +163,6 @@ const CreatePost = () => {
 
         }
     })
-
-    //editing = false
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>

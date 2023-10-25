@@ -12,7 +12,7 @@ export interface ILooseData {
 }
 
 export interface IExtraLink {
-    linkId: string,
+    linkId?: string,
     link: string,
     linkText: string,
 }
@@ -27,6 +27,7 @@ export interface IPost {
     tools: string,
     isFirstPage: boolean,
     isHidden: boolean,
-    imageUrl: string,
+    imageUrl?: string,
+    projectImage: any,
     extraLinks: IExtraLink[]
 }
