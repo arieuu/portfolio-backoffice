@@ -62,8 +62,9 @@ const CreatePost = () => {
     const [quantityExtraLinks, setQuantityExtraLinks] = useState(0)
     const [extraLinks, setExtraLinks] = useState<IExtraLink[]>([])
     
-    // CAPTURE DATA 
+    // EDITING MODE 
 
+    let editing = false
 
     const onSuccess = () => {
         return toast({
@@ -125,6 +126,7 @@ const CreatePost = () => {
 
         // Clean state after successful submit
 
+        // setValue("extraLinkText0", "text")
         setExtraLinks([])
 
         // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
@@ -148,8 +150,18 @@ const CreatePost = () => {
 
             if(paramData.extraContent) setValue("more", paramData?.extraContent)
         }
+
+        // Editing test
+
+        if(editing) {
+            // setQuantityExtraLinks(2)
+            setValue("extraLinkQuantity", "2")
+            setExtraLinks([{linkText: "testtext", link: "link.com"}, {linkText: "fodas", link: "fdfd"}])
+
+        }
     })
 
+    //editing = false
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
@@ -204,9 +216,16 @@ const CreatePost = () => {
 
 
 
-
                 <FormLabel> Extra links </FormLabel>
-                <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder="How many extra links" border="1px black solid" mb={7} onChange={(num) => setQuantityExtraLinks(parseInt(num.target.value))}/>
+                <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder="How many extra links" border="1px black solid" mb={7} onChange={(num) => {
+                    if(editing) editing = false
+                    
+                    // Only if editing
+                    if(editing && parseInt(num.target.value) > 1) setQuantityExtraLinks(parseInt(num.target.value))
+
+                    // Normal
+                    setQuantityExtraLinks(parseInt(num.target.value))
+                }}/>
                 
                 {Array.from({length: quantityExtraLinks}).map((number, index) => {
                     const extraLink = {
@@ -215,12 +234,13 @@ const CreatePost = () => {
                     }
 
                     if(extraLinks.length < quantityExtraLinks) setExtraLinks([...extraLinks, extraLink])
-                    return <InputGroup> 
-                                <Input id="extraLinkText"  onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
+                    return <InputGroup key={index}> 
+                                { /*<Input id={"extraLinkText" + index} defaultValue={extraLinks[index]?.linkText} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/> */}
+                                <Input required id={"extraLinkText" + index} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
                                 { (errors.extraLinkText) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkText?.message?.toString()}</AlertTitle> </Alert> }
 
 
-                                <Input id="extraLinkLink"  onChange={(res) => setExtralinkState(index, undefined,res.target.value)} type="text" placeholder="Link" border="1px black solid" mb={7}/>
+                                <Input required id="extraLinkLink"  onChange={(res) => setExtralinkState(index, undefined,res.target.value)} type="text" placeholder="Link" border="1px black solid" mb={7}/>
                                 { (errors.extraLinkLink) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkLink?.message?.toString()}</AlertTitle> </Alert> }
                             </InputGroup>
                 })}
