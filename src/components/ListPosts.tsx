@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, SimpleGrid, Stack, Text, useToast } from "@chakra-ui/react";
+import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, SimpleGrid, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
 import useDeletePost from "../hooks/useDeletePost";
 import useGetPosts from "../hooks/useGetPosts";
 import useEditPostPartially  from "../hooks/useEditPostPartially";
@@ -93,6 +93,8 @@ const ListPosts = () => {
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8}>
 
             <Heading mb={"24"}> Posts </Heading>
+
+            { isLoading && <Spinner /> }
 
             <SimpleGrid columns={2} spacing="5">
 

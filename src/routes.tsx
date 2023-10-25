@@ -6,6 +6,7 @@ import DashboardHome from "./components/DashboardHome";
 import CreateData from "./components/CreateData";
 import ListData from "./components/ListData";
 import ListPosts from "./components/ListPosts";
+import CreatePost from "./components/CreatePost";
 
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
                     {
                         path: "posts",
                         element: <ListPosts />
+                    },
+                    {
+                        path: "posts/create",
+                        element: <CreatePost />
                     }
                 ]
             }

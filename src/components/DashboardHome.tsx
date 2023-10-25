@@ -30,7 +30,7 @@ const DashboardHome = () => {
 
                 <Card >
                     <CardHeader>
-                        <Heading size='xl'>Loose data </Heading>
+                        <Heading size='xl'> Loose data </Heading>
                     </CardHeader>
 
                     <CardBody>
