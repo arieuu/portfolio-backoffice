@@ -66,8 +66,8 @@ const CreatePost = () => {
 
     const onSuccess = () => {
         return toast({
-          title: 'Data persisted.',
-          description: "The data has been successfuly persisted to the database",
+          title: 'Post successfuly created.',
+          description: "The post has been persisted to the database",
           status: 'success',
           duration: 3000,
           isClosable: true,
@@ -118,9 +118,9 @@ const CreatePost = () => {
             more: data.more,
             link: data.link,
             tools: data.tools,
-            isFirstPage: Boolean(data.isFirstPage),
-            isHidden: Boolean(data.isHidden),
-            projectImage: data.projectImage[0],     // This propriety needs to be same name as multer's upload.single to work
+            isFirstPage: data.isFirstPage == "true", // Converting to boolean
+            isHidden: data.isHidden == "true",
+            projectImage: data.projectImage[0],      // This propriety needs to be same name as multer's upload.single to work
             extraLinks: finalExtraLinksArray,
         }
 
@@ -202,14 +202,14 @@ const CreatePost = () => {
                 { (errors.projectImage) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.projectImage?.message?.toString()}</AlertTitle> </Alert> }
 
                 <FormLabel> Home page </FormLabel>
-                <Select id="isFirstPage" {...register("isFirstPage")} defaultValue="Yessss" border="1px black solid" mb={7}>
+                <Select id="isFirstPage" {...register("isFirstPage")} border="1px black solid" mb={7}>
                     <option value='true'> Yes </option>
                     <option value='false'> No </option>
                 </Select>
                 { (errors.isFirstPage) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.isFirstPage?.message?.toString()}</AlertTitle> </Alert> }
 
                 <FormLabel> Hide post </FormLabel>
-                <Select id="isHidden" {...register("isHidden")} defaultValue="No" border="1px black solid" mb={7}>
+                <Select id="isHidden" {...register("isHidden")} border="1px black solid" mb={7}>
                     <option value="true"> Yes </option>
                     <option value='false'> No </option>
                 </Select>
