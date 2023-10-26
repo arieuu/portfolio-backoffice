@@ -7,6 +7,7 @@ import { z } from "zod";
 import useGetOneLooseData from "../hooks/useGetOneLooseData";
 import useCreatePost from "../hooks/useCreatePost";
 import { IExtraLink, IPost } from "../types/main";
+import useGetOnePost from "../hooks/useGetOnePost";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -52,9 +53,9 @@ const CreatePost = () => {
     const { register, handleSubmit, formState: { errors }, setValue} = useForm<SchemaShape>({ resolver: zodResolver(schema)});
     const toast = useToast();
 
-    const { dataTypeParam } = useParams();
+    const { postIdParam } = useParams();
 
-    const { data: paramData, isLoading: isParamLoading } = useGetOneLooseData(dataTypeParam);
+    const { data: paramData, isLoading: isParamLoading } = useGetOnePost(postIdParam);
 
     const [quantityExtraLinks, setQuantityExtraLinks] = useState(0)
     const [extraLinks, setExtraLinks] = useState<IExtraLink[]>([])
@@ -102,7 +103,6 @@ const CreatePost = () => {
 
 
     const onSubmit: SubmitHandler<SchemaShape> = (data) => {
-
         const finalExtraLinksArray: IExtraLink[] = [];
 
         extraLinks.map((extraLink) => {
@@ -127,14 +127,28 @@ const CreatePost = () => {
 
         mutate(postData);
 
+        // Clean up inputs after a submit. This needs to be checked so it happens only on successful submits
+
+        setValue("title", "");
+        setValue("year", "");
+        setValue("description", "");
+        setValue("more", "");
+        setValue("link", "");
+        setValue("tools", "");
+        setValue("projectImage", "");
+        setValue("extraLinkQuantity", "0")
+        setQuantityExtraLinks(0)
+
         // setExtraLinks([])
 
         // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
 
+        /*
         if (paramData) paramData.title = ""
         if (paramData) paramData.type = ""
         if (paramData) paramData.content = ""
         if (paramData?.extraContent) paramData.extraContent = ""
+        */
 
     }
 
@@ -142,14 +156,17 @@ const CreatePost = () => {
 
         // If there's a paramete in the url then we are editing data, so we set all the inputs with the needed data
 
+        /*
         if(paramData) {
-            // setValue("title", paramData?.title)
-            // setValue("description", paramData?.description)
+            setValue("title", paramData?.title)
+            setValue("description", paramData?.description)
+            setValue("year", paramData?.year)
 
             // This field is optional
 
-            if(paramData.extraContent) setValue("more", paramData?.extraContent)
+            if(paramData.more) setValue("more", paramData?.more)
         }
+    */
 
         // Editing test
 
@@ -163,7 +180,7 @@ const CreatePost = () => {
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
-            { dataTypeParam ? <Heading mb={"24"}> Edit data </Heading> : <Heading mb={"24"}> Create post</Heading> }
+            { postIdParam ? <Heading mb={"24"}> Edit post </Heading> : <Heading mb={"24"}> Create post </Heading> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
 

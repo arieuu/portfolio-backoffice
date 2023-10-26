@@ -76,7 +76,7 @@ const CreateData = () => {
 
     useEffect(() => {
 
-        // If there's a paramete in the url then we are editing data, so we set all the inputs with the needed data
+        // If there's a parameter in the url then we are editing data, so we set all the inputs with the needed data
 
         if(paramData) {
             setValue("type", paramData?.type)

@@ -4,7 +4,7 @@ import { IPost } from "../types/main";
 
 
 
-const useGetOnePost = (postId: string) => {
+const useGetOnePost = (postId: string = "") => {
 
     const query = useQuery({
         queryKey: ["singlePost"],

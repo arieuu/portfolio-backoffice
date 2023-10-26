@@ -27,7 +27,7 @@ const Dashboard = () => {
                 <Heading mb="8" mt="8" fontSize={"2xl"}> Posts </Heading>
                 <Stack width="80%">
                     <Button as={NavLink} to="posts" end _activeLink={{background: "#00a0dc", color: "white"}} border="1px solid #00a0dc" color="#00a0dc"> List posts </Button>
-                    <Button as={NavLink} to="posts/create" end _activeLink={{background: "#00a0dc", color: "white"}} border="1px solid #00a0dc" color="#00a0dc"> Create post </Button>
+                    <Button as={NavLink} to="posts/create" _activeLink={{background: "#00a0dc", color: "white"}} border="1px solid #00a0dc" color="#00a0dc"> Create post </Button>
                     <Button colorScheme="linkedin" variant="outline"> Edit post </Button>
                     <Button colorScheme="linkedin" variant="outline"> Delete post </Button>
                 </Stack>

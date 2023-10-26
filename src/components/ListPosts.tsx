@@ -3,6 +3,7 @@ import useDeletePost from "../hooks/useDeletePost";
 import useGetPosts from "../hooks/useGetPosts";
 import useEditPostPartially  from "../hooks/useEditPostPartially";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 
 const ListPosts = () => {
@@ -128,7 +129,7 @@ const ListPosts = () => {
                     <CardFooter>
 
                         <ButtonGroup spacing='2'>
-                            <Button variant='solid' colorScheme='blue'>
+                            <Button as={Link} to={"create/" + post.postId} variant='solid' colorScheme='blue'>
                                 Edit post 
                             </Button>
 
