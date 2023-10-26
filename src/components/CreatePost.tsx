@@ -8,6 +8,7 @@ import useGetOneLooseData from "../hooks/useGetOneLooseData";
 import useCreatePost from "../hooks/useCreatePost";
 import { IExtraLink, IPost } from "../types/main";
 import useGetOnePost from "../hooks/useGetOnePost";
+import useEditPost from "../hooks/useEditPost";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -76,7 +77,13 @@ const CreatePost = () => {
     }
 
 
+    // Hook for creating post
+
     const { isLoading: isLoadingCreatePost, isError: isErrorCreatePost, isSuccess: isPostCreatedSuccess, data: dataCreatedPost, mutate } = useCreatePost(onSuccess);
+
+    // Hook for editing post
+
+    const { data: editedPostData, mutate: mutateEditPost} = useEditPost(onSuccess);
 
     const setExtralinkState = (index: number, linkText?: string, link?: string) => {
         const newExtraLinks: IExtraLink[] = [];
@@ -127,7 +134,15 @@ const CreatePost = () => {
 
         console.log(postData);
 
-        mutate(postData);
+        // Here we decide what hook to use (if it's an edit or a creation)
+
+        if(paramData && postIdParam) {
+            postData.postId = postIdParam
+            mutateEditPost(postData);
+
+        } else if(!paramData && !postIdParam) {
+            mutate(postData);
+        }
 
         // Clean up inputs after a submit. This needs to be checked so it happens only on successful submits
 
