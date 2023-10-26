@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, Select, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
@@ -59,7 +59,6 @@ const CreatePost = () => {
     const [quantityExtraLinks, setQuantityExtraLinks] = useState(0)
     const [extraLinks, setExtraLinks] = useState<IExtraLink[]>([])
 
-    
     // EDITING MODE 
 
     let editing = false
@@ -74,7 +73,7 @@ const CreatePost = () => {
         })
     }
 
-    const { isLoading: isLoadingCreatePost, isError: isErrorCreatePost, data: dataCreatedPost, mutate } = useCreatePost(onSuccess);
+    const { isLoading: isLoadingCreatePost, isError: isErrorCreatePost, isSuccess: isPostCreatedSuccess, data: dataCreatedPost, mutate } = useCreatePost(onSuccess);
 
     const setExtralinkState = (index: number, linkText?: string, link?: string) => {
         const newExtraLinks: IExtraLink[] = [];
@@ -121,16 +120,14 @@ const CreatePost = () => {
             isFirstPage: data.isFirstPage == "true", // Converting to boolean
             isHidden: data.isHidden == "true",
             projectImage: data.projectImage[0],      // This propriety needs to be same name as multer's upload.single to work
-            extraLinks: finalExtraLinksArray,
+            extraLinks: extraLinks,
         }
 
         console.log(postData);
 
         mutate(postData);
-        // Clean state after successful submit
 
-        // setValue("extraLinkText0", "text")
-        setExtraLinks([])
+        // setExtraLinks([])
 
         // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
 
@@ -237,7 +234,7 @@ const CreatePost = () => {
                     if(extraLinks.length < quantityExtraLinks) setExtraLinks([...extraLinks, extraLink])
                     return <InputGroup key={index}> 
                                 { /*<Input id={"extraLinkText" + index} defaultValue={extraLinks[index]?.linkText} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/> */}
-                                <Input required id={"extraLinkText" + index} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
+                                <Input required onChange={(res) => setExtralinkState(index, res.target.value, undefined)} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
                                 { (errors.extraLinkText) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkText?.message?.toString()}</AlertTitle> </Alert> }
 
 
