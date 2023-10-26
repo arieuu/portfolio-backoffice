@@ -4,6 +4,7 @@ import useGetPosts from "../hooks/useGetPosts";
 import useEditPostPartially  from "../hooks/useEditPostPartially";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { error } from "console";
 
 
 const ListPosts = () => {
@@ -96,6 +97,8 @@ const ListPosts = () => {
             <Heading mb={"24"}> Posts </Heading>
 
             { isLoading && <Spinner /> }
+
+            { isError && <Text> Error </Text> }
 
             <SimpleGrid columns={2} spacing="5">
 

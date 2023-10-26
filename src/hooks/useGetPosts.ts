@@ -10,7 +10,7 @@ const useGetPosts = () => {
         queryFn: () => {
             return axiosInstance.get<IPost[]>("/post")
             .then(res => res.data)
-        }
+        },
     });
 
     return query;

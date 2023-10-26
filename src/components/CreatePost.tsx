@@ -55,7 +55,8 @@ const CreatePost = () => {
 
     const { postIdParam } = useParams();
 
-    const { data: paramData, isLoading: isParamLoading } = useGetOnePost(postIdParam);
+    const checkParam = postIdParam ? postIdParam : "none"
+    const { data: paramData, isLoading: isParamLoading } = useGetOnePost(checkParam);
 
     const [quantityExtraLinks, setQuantityExtraLinks] = useState(0)
     const [extraLinks, setExtraLinks] = useState<IExtraLink[]>([])
@@ -73,6 +74,7 @@ const CreatePost = () => {
           isClosable: true,
         })
     }
+
 
     const { isLoading: isLoadingCreatePost, isError: isErrorCreatePost, isSuccess: isPostCreatedSuccess, data: dataCreatedPost, mutate } = useCreatePost(onSuccess);
 
@@ -143,12 +145,6 @@ const CreatePost = () => {
 
         // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
 
-        /*
-        if (paramData) paramData.title = ""
-        if (paramData) paramData.type = ""
-        if (paramData) paramData.content = ""
-        if (paramData?.extraContent) paramData.extraContent = ""
-        */
 
     }
 
@@ -156,17 +152,39 @@ const CreatePost = () => {
 
         // If there's a paramete in the url then we are editing data, so we set all the inputs with the needed data
 
-        /*
+
         if(paramData) {
             setValue("title", paramData?.title)
             setValue("description", paramData?.description)
             setValue("year", paramData?.year)
+            setValue("title", paramData.title);
+            setValue("year", paramData.year);
+            setValue("description", paramData.description);
+            setValue("more", paramData.more);
+            setValue("link", paramData.link);
+            setValue("tools", paramData.tools);
+            setValue("projectImage", paramData.projectImage);
 
             // This field is optional
 
             if(paramData.more) setValue("more", paramData?.more)
-        }
-    */
+
+        } else {
+            setValue("title", "")
+            setValue("description", "")
+            setValue("year", "")
+            setValue("title", "");
+            setValue("year", "");
+            setValue("description", "");
+            setValue("more", "");
+            setValue("link", "");
+            setValue("tools", "");
+            setValue("projectImage", "");
+
+            // This field is optional
+
+
+        } 
 
         // Editing test
 
@@ -176,7 +194,7 @@ const CreatePost = () => {
             setExtraLinks([{linkText: "testtext", link: "link.com"}, {linkText: "fodas", link: "fdfd"}])
 
         }
-    })
+    }, [paramData])
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>

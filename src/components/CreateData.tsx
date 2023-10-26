@@ -67,16 +67,18 @@ const CreateData = () => {
 
         // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
 
-        if (paramData) paramData.title = ""
-        if (paramData) paramData.type = ""
-        if (paramData) paramData.content = ""
-        if (paramData?.extraContent) paramData.extraContent = ""
+        if (paramData) {
+            paramData.title = "";
+            paramData.type = "";
+            paramData.content = "";
+            paramData.extraContent = "";
+        }
 
     }
 
     useEffect(() => {
 
-        // If there's a parameter in the url then we are editing data, so we set all the inputs with the needed data
+        // If there's a passed parameter returns data then we are editing data, so we set all the inputs with the needed data
 
         if(paramData) {
             setValue("type", paramData?.type)
