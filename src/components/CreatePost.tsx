@@ -86,7 +86,9 @@ const CreatePost = () => {
     const { data: editedPostData, mutate: mutateEditPost} = useEditPost(onSuccess);
 
     const setExtralinkState = (index: number, linkText?: string, link?: string) => {
+
         const newExtraLinks: IExtraLink[] = [];
+
 
         extraLinks.map((extraLink, linkPosition) => {
            if(linkPosition == index) {
@@ -108,16 +110,25 @@ const CreatePost = () => {
         });
 
         setExtraLinks(newExtraLinks);
+        
     }
 
+    
+        console.log(extraLinks)
 
     const onSubmit: SubmitHandler<SchemaShape> = (data) => {
+
+
+        /** To delete extra links we just need to delete either the text
+         * or the link. Then it will be excluded from the final object
+         */
+
         const finalExtraLinksArray: IExtraLink[] = [];
 
         extraLinks.map((extraLink) => {
             if(extraLink.linkText != "") finalExtraLinksArray.push(extraLink)
-        });
-        
+        })
+
         const postData: IPost = {
             postId: "",
             title: data.title,
@@ -129,7 +140,7 @@ const CreatePost = () => {
             isFirstPage: data.isFirstPage == "true", // Converting to boolean
             isHidden: data.isHidden == "true",
             projectImage: data.projectImage[0],      // This propriety needs to be same name as multer's upload.single to work
-            extraLinks: extraLinks,
+            extraLinks: finalExtraLinksArray,
         }
 
         console.log(postData);
@@ -198,18 +209,25 @@ const CreatePost = () => {
 
             // This field is optional
 
-
         } 
+
+        if(paramData) editing = true
+
 
         // Editing test
 
         if(editing) {
-            // setQuantityExtraLinks(2)
-            setValue("extraLinkQuantity", "2")
-            setExtraLinks([{linkText: "testtext", link: "link.com"}, {linkText: "fodas", link: "fdfd"}])
+            if(paramData?.extraLinks) {
+                setQuantityExtraLinks(paramData.extraLinks.length)
+                setValue("extraLinkQuantity", paramData?.extraLinks.length.toString())
+
+                // There's a bug with the extralinks not updating properly
+
+                setExtraLinks(paramData?.extraLinks)
+            }
 
         }
-    }, [paramData])
+    }, [paramData?.title])
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
@@ -263,17 +281,16 @@ const CreatePost = () => {
 
 
 
-
                 <FormLabel> Extra links </FormLabel>
                 <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder="How many extra links" border="1px black solid" mb={7} onChange={(num) => {
-                    if(editing) editing = false
                     
                     // Only if editing
-                    if(editing && parseInt(num.target.value) > 1) setQuantityExtraLinks(parseInt(num.target.value))
+                    if(editing && parseInt(num.target.value) > quantityExtraLinks) setQuantityExtraLinks(parseInt(num.target.value))
 
                     // Normal
                     setQuantityExtraLinks(parseInt(num.target.value))
                 }}/>
+
                 
                 {Array.from({length: quantityExtraLinks}).map((number, index) => {
                     const extraLink = {
@@ -282,13 +299,14 @@ const CreatePost = () => {
                     }
 
                     if(extraLinks.length < quantityExtraLinks) setExtraLinks([...extraLinks, extraLink])
+
                     return <InputGroup key={index}> 
-                                { /*<Input id={"extraLinkText" + index} defaultValue={extraLinks[index]?.linkText} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/> */}
-                                <Input required onChange={(res) => setExtralinkState(index, res.target.value, undefined)} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
+                                <Input defaultValue={extraLinks[index]?.linkText} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
+                                {/*<Input required onChange={(res) => setExtralinkState(index, res.target.value, undefined)} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/> */}
                                 { (errors.extraLinkText) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkText?.message?.toString()}</AlertTitle> </Alert> }
 
 
-                                <Input required id="extraLinkLink"  onChange={(res) => setExtralinkState(index, undefined,res.target.value)} type="text" placeholder="Link" border="1px black solid" mb={7}/>
+                                <Input id="extraLinkLink" defaultValue={extraLinks[index]?.link} onChange={(res) => setExtralinkState(index, undefined,res.target.value)} type="text" placeholder="Link" border="1px black solid" mb={7}/>
                                 { (errors.extraLinkLink) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkLink?.message?.toString()}</AlertTitle> </Alert> }
                             </InputGroup>
                 })}
