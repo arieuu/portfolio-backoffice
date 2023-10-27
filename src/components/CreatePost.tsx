@@ -66,6 +66,10 @@ const CreatePost = () => {
 
     let editing = false
 
+    // The placeholder will show how many extra links are available when editing
+
+    const [extraLinksPlaceholder, setExtraLinksPlaceholder] = useState("");
+
     const onSuccess = () => {
         return toast({
           title: 'Post successfuly created.',
@@ -114,8 +118,6 @@ const CreatePost = () => {
     }
 
     
-        console.log(extraLinks)
-
     const onSubmit: SubmitHandler<SchemaShape> = (data) => {
 
 
@@ -167,29 +169,26 @@ const CreatePost = () => {
         setValue("extraLinkQuantity", "0")
         setQuantityExtraLinks(0)
 
-        // setExtraLinks([])
-
-        // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
-
-
     }
+
 
     useEffect(() => {
 
         // If there's a paramete in the url then we are editing data, so we set all the inputs with the needed data
 
 
-        if(paramData) {
+        if(paramData?.title) {
             setValue("title", paramData?.title)
-            setValue("description", paramData?.description)
             setValue("year", paramData?.year)
-            setValue("title", paramData.title);
-            setValue("year", paramData.year);
-            setValue("description", paramData.description);
+            setValue("description", paramData?.description)
             setValue("more", paramData.more);
             setValue("link", paramData.link);
             setValue("tools", paramData.tools);
             setValue("projectImage", paramData.projectImage);
+            setExtraLinks(paramData.extraLinks) 
+            console.log(extraLinks)
+            console.log(paramData.extraLinks)
+
 
             // This field is optional
 
@@ -197,36 +196,35 @@ const CreatePost = () => {
 
         } else {
             setValue("title", "")
-            setValue("description", "")
             setValue("year", "")
-            setValue("title", "");
-            setValue("year", "");
-            setValue("description", "");
+            setValue("description", "")
             setValue("more", "");
             setValue("link", "");
             setValue("tools", "");
             setValue("projectImage", "");
 
+
             // This field is optional
 
         } 
 
-        if(paramData) editing = true
+        if(paramData?.title) editing = true
 
 
         // Editing test
 
         if(editing) {
+
             if(paramData?.extraLinks) {
-                setQuantityExtraLinks(paramData.extraLinks.length)
-                setValue("extraLinkQuantity", paramData?.extraLinks.length.toString())
-
-                // There's a bug with the extralinks not updating properly
-
-                setExtraLinks(paramData?.extraLinks)
+                setExtraLinksPlaceholder(paramData.extraLinks.length.toString())
             }
 
+        } else {
+            setQuantityExtraLinks(0)
+            setValue("extraLinkQuantity", "")
+            setExtraLinksPlaceholder("How many extra links")
         }
+
     }, [paramData?.title])
 
     return(
@@ -282,7 +280,7 @@ const CreatePost = () => {
 
 
                 <FormLabel> Extra links </FormLabel>
-                <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder="How many extra links" border="1px black solid" mb={7} onChange={(num) => {
+                <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder={extraLinksPlaceholder} border="1px black solid" mb={7} onChange={(num) => {
                     
                     // Only if editing
                     if(editing && parseInt(num.target.value) > quantityExtraLinks) setQuantityExtraLinks(parseInt(num.target.value))
@@ -312,7 +310,7 @@ const CreatePost = () => {
                 })}
 
 
-                <Button type="submit" colorScheme="linkedin"> Create post </Button>
+                <Button type="submit" colorScheme="linkedin"> { postIdParam ? <Text> Edit post </Text>: <Text> Create Post </Text> } </Button>
 
             </FormControl>
             

@@ -23,7 +23,7 @@ const DashboardHome = () => {
                         <Text> There are <strong> { postsData?.length } </strong> posts currently listed in your portfolio. </Text>
                     </CardBody>
                     <CardFooter>
-                        <Button as={Link} to="data"> View items </Button>
+                        <Button as={Link} to="posts"> View items </Button>
                     </CardFooter>
                 </Card>
 
