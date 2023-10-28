@@ -1,7 +1,5 @@
-import { Box, Button, Divider, Flex, Heading, SimpleGrid, Stack } from "@chakra-ui/react";
-import useIsAuthenticated from "../hooks/useIsAuthenticated";
+import { Box, Button, Flex, Heading, Stack } from "@chakra-ui/react";
 import { NavLink, Outlet } from "react-router-dom";
-import { color } from "framer-motion";
 
 
 const Dashboard = () => {
@@ -28,8 +26,6 @@ const Dashboard = () => {
                 <Stack width="80%">
                     <Button as={NavLink} to="posts" end _activeLink={{background: "#00a0dc", color: "white"}} border="1px solid #00a0dc" color="#00a0dc"> List posts </Button>
                     <Button as={NavLink} to="posts/create" _activeLink={{background: "#00a0dc", color: "white"}} border="1px solid #00a0dc" color="#00a0dc"> Create post </Button>
-                    <Button colorScheme="linkedin" variant="outline"> Edit post </Button>
-                    <Button colorScheme="linkedin" variant="outline"> Delete post </Button>
                 </Stack>
                 
 

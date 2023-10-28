@@ -1,14 +1,13 @@
-import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, Select, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, Select, Text, Textarea, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
-import useGetOneLooseData from "../hooks/useGetOneLooseData";
 import useCreatePost from "../hooks/useCreatePost";
-import { IExtraLink, IPost } from "../types/main";
-import useGetOnePost from "../hooks/useGetOnePost";
 import useEditPost from "../hooks/useEditPost";
+import useGetOnePost from "../hooks/useGetOnePost";
+import { IExtraLink, IPost } from "../types/main";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -72,7 +71,7 @@ const CreatePost = () => {
 
     const onSuccess = () => {
         return toast({
-          title: 'Post successfuly created.',
+          title: 'Post successfuly saved.',
           description: "The post has been persisted to the database",
           status: 'success',
           duration: 3000,
@@ -87,7 +86,7 @@ const CreatePost = () => {
 
     // Hook for editing post
 
-    const { data: editedPostData, mutate: mutateEditPost} = useEditPost(onSuccess);
+    const { data: editedPostData, isError: isEditPostError, mutate: mutateEditPost} = useEditPost(onSuccess);
 
     const setExtralinkState = (index: number, linkText?: string, link?: string) => {
 
@@ -145,15 +144,15 @@ const CreatePost = () => {
             extraLinks: finalExtraLinksArray,
         }
 
-        console.log(postData);
-
         // Here we decide what hook to use (if it's an edit or a creation)
 
         if(paramData && postIdParam) {
             postData.postId = postIdParam
             mutateEditPost(postData);
 
-        } else if(!paramData && !postIdParam) {
+        // If there's no post already pre-loaded we are creating a new one
+
+        } else if(!paramData?.title) {
             mutate(postData);
         }
 
@@ -186,8 +185,6 @@ const CreatePost = () => {
             setValue("tools", paramData.tools);
             setValue("projectImage", paramData.projectImage);
             setExtraLinks(paramData.extraLinks) 
-            console.log(extraLinks)
-            console.log(paramData.extraLinks)
 
 
             // This field is optional
@@ -202,9 +199,6 @@ const CreatePost = () => {
             setValue("link", "");
             setValue("tools", "");
             setValue("projectImage", "");
-
-
-            // This field is optional
 
         } 
 
@@ -229,7 +223,7 @@ const CreatePost = () => {
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
-            { postIdParam ? <Heading mb={"24"}> Edit post </Heading> : <Heading mb={"24"}> Create post </Heading> }
+            { paramData?.title ? <Heading mb={"24"}> Edit post </Heading> : <Heading mb={"24"}> Create post </Heading> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
 
@@ -310,7 +304,9 @@ const CreatePost = () => {
                 })}
 
 
-                <Button type="submit" colorScheme="linkedin"> { postIdParam ? <Text> Edit post </Text>: <Text> Create Post </Text> } </Button>
+                { isErrorCreatePost && <Text color="red"> Something went wrong! </Text> }
+                { isEditPostError && <Text color="red"> Something went wrong! </Text> }
+                <Button type="submit" colorScheme="linkedin"> { paramData?.title ? <Text> Edit post </Text>: <Text> Create Post </Text> } </Button>
 
             </FormControl>
             

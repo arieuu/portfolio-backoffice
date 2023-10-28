@@ -1,10 +1,9 @@
 import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, SimpleGrid, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
-import useDeletePost from "../hooks/useDeletePost";
-import useGetPosts from "../hooks/useGetPosts";
-import useEditPostPartially  from "../hooks/useEditPostPartially";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { error } from "console";
+import useDeletePost from "../hooks/useDeletePost";
+import useEditPostPartially from "../hooks/useEditPostPartially";
+import useGetPosts from "../hooks/useGetPosts";
 
 
 const ListPosts = () => {
@@ -98,7 +97,7 @@ const ListPosts = () => {
 
             { isLoading && <Spinner /> }
 
-            { isError && <Text> Error </Text> }
+            { isError && <Text color="red"> Something went wrong! </Text> }
 
             <SimpleGrid columns={2} spacing="5">
 
@@ -120,6 +119,8 @@ const ListPosts = () => {
                             {post?.more}
                         </Text>
 
+                        <Text fontWeight={"bold"}> Extra links: </Text>
+
                         <SimpleGrid columns={3}>
                             {post?.extraLinks.map(link => <a key={link.linkId} href={link.link} target="_blank"> {link.linkText} </a>)}
                         </SimpleGrid>
@@ -135,6 +136,8 @@ const ListPosts = () => {
                             <Button as={Link} to={"create/" + post.postId} variant='solid' colorScheme='blue'>
                                 Edit post 
                             </Button>
+
+                            {/* isDeleteError && <Text color="red"> Something went wrong! </Text> */}
 
                             <Button variant='solid' colorScheme='red' onClick={() => deletePost(post.postId)}>
                                 Delete

@@ -5,7 +5,7 @@ import useGetLooseData from "../hooks/useGetLooseData";
 
 const ListData = () => {
 
-    const {isLoading, data}= useGetLooseData();
+    const { isLoading, data, isError }= useGetLooseData();
 
     return (
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8}>
@@ -15,6 +15,8 @@ const ListData = () => {
             <SimpleGrid columns={3} spacing="5">
 
             {isLoading && <Spinner /> }
+
+            { isError && <Text color="red"> Something went wrong! </Text> }
 
 
             {data?.map((looseData) => {

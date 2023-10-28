@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, Spinner, Textarea, useToast } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -46,7 +46,7 @@ const CreateData = () => {
         })
     }
 
-    const { mutate, isError, isLoading } = useCreateLooseData(onSuccess)
+    const { mutate, isError: isCreateError, isLoading } = useCreateLooseData(onSuccess)
 
     const onSubmit: SubmitHandler<SchemaShape> = (data) => {
         const looseData = {
@@ -67,12 +67,14 @@ const CreateData = () => {
 
         // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
 
+        /*
         if (paramData) {
             paramData.title = "";
             paramData.type = "";
             paramData.content = "";
             paramData.extraContent = "";
         }
+        */
 
     }
 
@@ -80,7 +82,7 @@ const CreateData = () => {
 
         // If there's a passed parameter returns data then we are editing data, so we set all the inputs with the needed data
 
-        if(paramData) {
+        if(paramData?.title) {
             setValue("type", paramData?.type)
             setValue("title", paramData?.title)
             setValue("content", paramData?.content)
@@ -88,13 +90,19 @@ const CreateData = () => {
             // This field is optional
 
             if(paramData.extraContent) setValue("extra", paramData?.extraContent)
+
+        } else {
+            setValue("type", "")
+            setValue("title", "")
+            setValue("content", "")
         }
-    })
+        
+    }, [paramData?.title])
 
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
-            { dataTypeParam ? <Heading mb={"24"}> Edit data </Heading> : <Heading mb={"24"}> Create data </Heading> }
+            { paramData?.title ? <Heading mb={"24"}> Edit data </Heading> : <Heading mb={"24"}> Create data </Heading> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
 
@@ -119,7 +127,8 @@ const CreateData = () => {
                 
                 { (errors.extra) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extra?.message}</AlertTitle> </Alert> }
 
-                <Button type="submit" colorScheme="linkedin"> {isLoading && <Spinner /> } Create data </Button>
+                { isCreateError && <Text color="red"> Something went wrong! </Text> }
+                <Button type="submit" colorScheme="linkedin"> {isLoading && <Spinner /> } { paramData?.title ? <Text> Edit data </Text> : <Text> Create data </Text>} </Button>
 
             </FormControl>
             

@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { RouterProvider } from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -19,6 +20,7 @@ root.render(
       <QueryClientProvider client={queryClient}>
         {/** Let the router decide what gets rendered */}
         <RouterProvider router={router} />
+        <ReactQueryDevtools />
       </QueryClientProvider>
 
     </ChakraProvider>
