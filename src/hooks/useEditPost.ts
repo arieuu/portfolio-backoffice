@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
 import { IError, IPost } from "../types/main";
 
-
 const useEditPost = (onSucess: () => void) => {
 
     const navigate = useNavigate();

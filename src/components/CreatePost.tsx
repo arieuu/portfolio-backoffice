@@ -55,8 +55,6 @@ const CreatePost = () => {
 
     const { postIdParam } = useParams();
 
-    const checkParam = postIdParam ? postIdParam : "none"
-    const { data: paramData, isLoading: isParamLoading } = useGetOnePost(checkParam);
 
     const [quantityExtraLinks, setQuantityExtraLinks] = useState(0)
     const [extraLinks, setExtraLinks] = useState<IExtraLink[]>([])
@@ -64,6 +62,8 @@ const CreatePost = () => {
     // EDITING MODE 
 
     let editing = false
+    const checkParam = postIdParam ? postIdParam : "none"
+    const { data: paramData, isLoading: isParamLoading } = useGetOnePost(checkParam);
 
     // The placeholder will show how many extra links are available when editing
 
@@ -127,8 +127,9 @@ const CreatePost = () => {
         const finalExtraLinksArray: IExtraLink[] = [];
 
         extraLinks.map((extraLink) => {
-            if(extraLink.linkText != "") finalExtraLinksArray.push(extraLink)
+            if(extraLink.linkText.length > 0) finalExtraLinksArray.push(extraLink)
         })
+
 
         const postData: IPost = {
             postId: "",
@@ -143,11 +144,11 @@ const CreatePost = () => {
             projectImage: data.projectImage[0],      // This propriety needs to be same name as multer's upload.single to work
             extraLinks: finalExtraLinksArray,
         }
-
+        
         // Here we decide what hook to use (if it's an edit or a creation)
 
-        if(paramData && postIdParam) {
-            postData.postId = postIdParam
+        if(paramData?.title) {
+            postData.postId = paramData.postId; 
             mutateEditPost(postData);
 
         // If there's no post already pre-loaded we are creating a new one
@@ -185,7 +186,6 @@ const CreatePost = () => {
             setValue("tools", paramData.tools);
             setValue("projectImage", paramData.projectImage);
             setExtraLinks(paramData.extraLinks) 
-
 
             // This field is optional
 
@@ -273,18 +273,24 @@ const CreatePost = () => {
 
 
 
-                <FormLabel> Extra links </FormLabel>
+                <FormLabel> Extra links { paramData && paramData.extraLinks.length > 0 && "(delete link text to remove extralink)" } </FormLabel>
                 <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder={extraLinksPlaceholder} border="1px black solid" mb={7} onChange={(num) => {
                     
                     // Only if editing
+
                     if(editing && parseInt(num.target.value) > quantityExtraLinks) setQuantityExtraLinks(parseInt(num.target.value))
 
-                    // Normal
+                    // If normal
+
                     setQuantityExtraLinks(parseInt(num.target.value))
                 }}/>
 
                 
+                
                 {Array.from({length: quantityExtraLinks}).map((number, index) => {
+
+                    // Turning the quantity of extralinks inserted into inputs. We make it into an array and go through the item doing what need to be done
+
                     const extraLink = {
                         link: "",
                         linkText: ""
@@ -293,19 +299,18 @@ const CreatePost = () => {
                     if(extraLinks.length < quantityExtraLinks) setExtraLinks([...extraLinks, extraLink])
 
                     return <InputGroup key={index}> 
+                                
                                 <Input defaultValue={extraLinks[index]?.linkText} onChange={((res) => setExtralinkState(index, res.target.value, undefined))} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/>
-                                {/*<Input required onChange={(res) => setExtralinkState(index, res.target.value, undefined)} type="text" placeholder="Link text" border="1px black solid" mb={7} mr={3}/> */}
-                                { (errors.extraLinkText) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkText?.message?.toString()}</AlertTitle> </Alert> }
-
 
                                 <Input id="extraLinkLink" defaultValue={extraLinks[index]?.link} onChange={(res) => setExtralinkState(index, undefined,res.target.value)} type="text" placeholder="Link" border="1px black solid" mb={7}/>
-                                { (errors.extraLinkLink) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.extraLinkLink?.message?.toString()}</AlertTitle> </Alert> }
+
                             </InputGroup>
                 })}
 
 
                 { isErrorCreatePost && <Text color="red"> Something went wrong! </Text> }
                 { isEditPostError && <Text color="red"> Something went wrong! </Text> }
+
                 <Button type="submit" colorScheme="linkedin"> { paramData?.title ? <Text> Edit post </Text>: <Text> Create Post </Text> } </Button>
 
             </FormControl>

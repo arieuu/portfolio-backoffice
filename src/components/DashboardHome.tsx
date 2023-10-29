@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Flex, Heading, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import useGetLooseData from "../hooks/useGetLooseData";
 import useGetPosts from "../hooks/useGetPosts";

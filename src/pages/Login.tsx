@@ -10,6 +10,7 @@ const schema = z.object({
 });
 
 // Getting object shape from our created zod schema object
+
 type SchemaShape = z.infer<typeof schema>;
 
 const Login = () => {

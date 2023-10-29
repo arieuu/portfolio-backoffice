@@ -34,10 +34,6 @@ const Dashboard = () => {
                 <Stack width="80%">
                     <Button as={NavLink} to="/" colorScheme="red" variant="outline" onClick={() => localStorage.setItem("loginToken", "")}> Logout </Button>
                 </Stack>
-                {/*
-                    side 1
-                    <h1> HOME PAGE { localStorage.getItem("loginToken")}</h1> 
-                */}
             </Box>
 
 

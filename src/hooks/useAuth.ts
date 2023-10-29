@@ -10,10 +10,6 @@ interface Ilogin {
     password: string,
 }
 
-// Custom error object with status codes
-
-
-
 const useAuth = () => {
 
     const navigate = useNavigate();

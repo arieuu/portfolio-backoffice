@@ -64,18 +64,6 @@ const CreateData = () => {
         setValue("title", "")
         setValue("content", "")
         setValue("extra", "")
-
-        // We do the same for the data that was gotten from the parameter (fetched with the other custom hook)
-
-        /*
-        if (paramData) {
-            paramData.title = "";
-            paramData.type = "";
-            paramData.content = "";
-            paramData.extraContent = "";
-        }
-        */
-
     }
 
     useEffect(() => {
@@ -96,12 +84,13 @@ const CreateData = () => {
             setValue("title", "")
             setValue("content", "")
         }
-        
+
     }, [paramData?.title])
 
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
+
             { paramData?.title ? <Heading mb={"24"}> Edit data </Heading> : <Heading mb={"24"}> Create data </Heading> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>

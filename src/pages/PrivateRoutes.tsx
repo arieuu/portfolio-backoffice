@@ -2,7 +2,6 @@ import { Flex, Spinner } from "@chakra-ui/react";
 import { Navigate, Outlet } from "react-router-dom";
 import useIsAuthenticated from "../hooks/useIsAuthenticated";
 
-
 const PrivateRoutes = () => {
     const { error, isLoading } =  useIsAuthenticated();
 

@@ -137,8 +137,6 @@ const ListPosts = () => {
                                 Edit post 
                             </Button>
 
-                            {/* isDeleteError && <Text color="red"> Something went wrong! </Text> */}
-
                             <Button variant='solid' colorScheme='red' onClick={() => deletePost(post.postId)}>
                                 Delete
                             </Button>
@@ -184,7 +182,9 @@ const ListPosts = () => {
 
                                 mutatePost({postId: post.postId, isHidden: post.isHidden, isFirstPage: !post.isFirstPage})
                             }}>
+                                
                                 { firstPage[index] == true ? <Text> Normalize </Text> : <Text> Highlight </Text> }
+
                             </Button>
                         </ButtonGroup>
 
