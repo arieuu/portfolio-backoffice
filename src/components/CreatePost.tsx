@@ -176,7 +176,6 @@ const CreatePost = () => {
 
         // If there's a paramete in the url then we are editing data, so we set all the inputs with the needed data
 
-
         if(paramData?.title) {
             setValue("title", paramData?.title)
             setValue("year", paramData?.year)
@@ -219,7 +218,7 @@ const CreatePost = () => {
             setExtraLinksPlaceholder("How many extra links")
         }
 
-    }, [paramData?.title])
+    }, [paramData?.title, paramData?.extraLinks])
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
@@ -273,7 +272,7 @@ const CreatePost = () => {
 
 
 
-                <FormLabel> Extra links { paramData && paramData.extraLinks.length > 0 && "(delete link text to remove extralink)" } </FormLabel>
+                <FormLabel> Extra links { paramData && paramData.extraLinks && paramData.extraLinks.length > 0 && "(delete link text to remove extralink)" } </FormLabel>
                 <Input id="extraLinkQuantity" {...register("extraLinkQuantity")} type="number" placeholder={extraLinksPlaceholder} border="1px black solid" mb={7} onChange={(num) => {
                     
                     // Only if editing
