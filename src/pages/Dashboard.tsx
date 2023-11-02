@@ -1,9 +1,21 @@
 import { Box, Button, Flex, Heading, Stack } from "@chakra-ui/react";
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 
 const Dashboard = () => {
-    
+    const location = useLocation(); 
+
+    const titles = [{
+        "url": "/dashboard/",
+        "title": "Ariel - Home"
+    }]
+
+    useEffect(() => {
+        document.title = "Ariel's Portfolio"
+    }, [])
+        
+
     return (
         <Flex maxWidth="80%" marginX="auto" height="100vh" alignItems="start" paddingTop="14" gap={10}>
             

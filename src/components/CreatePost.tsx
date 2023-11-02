@@ -10,7 +10,7 @@ import useGetOnePost from "../hooks/useGetOnePost";
 import { IExtraLink, IPost } from "../types/main";
 
 const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg", "svg"];
 
 const schema = z.object({
     title: z.string().min(4, {message: "Title too short"}),

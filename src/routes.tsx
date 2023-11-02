@@ -24,7 +24,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "",
-                        element: <DashboardHome />
+                        element: <DashboardHome />,
                     },
                     {
                         path: "data",
