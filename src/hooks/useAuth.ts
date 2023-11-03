@@ -25,6 +25,7 @@ const useAuth = () => {
        onError: (error: IError) => {
         if (error.response?.status == 400) error.message = "Please fill in the data properly";
         if (error.response?.status == 401) error.message = "Username/password incorrect!";
+        console.log(error)
        },
        
        onSuccess: (token) => {
