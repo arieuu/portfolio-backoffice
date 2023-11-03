@@ -11,9 +11,6 @@ const Dashboard = () => {
         "title": "Ariel - Home"
     }]
 
-    useEffect(() => {
-        document.title = "Ariel's Portfolio"
-    }, [])
         
 
     return (

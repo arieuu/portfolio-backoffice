@@ -13,6 +13,9 @@ const queryClient = new QueryClient;
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+document.title = "Ariel - portfolio"
+
 root.render(
   <React.StrictMode>
 
