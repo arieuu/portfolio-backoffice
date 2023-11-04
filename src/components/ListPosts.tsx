@@ -9,7 +9,7 @@ import useGetPosts from "../hooks/useGetPosts";
 const ListPosts = () => {
 
     const { isLoading, isError, data } = useGetPosts();
-    const baseImgUrl = "localhost:3000/"
+    const baseImgUrl = "api.arielcarvalho.io/";
     const toast = useToast();
 
     // Variables for button optimistic updates
@@ -106,7 +106,7 @@ const ListPosts = () => {
                 return <Card minW='md' key={post.postId}>
                     <CardBody>
                         <Image
-                        src={"http://" + baseImgUrl + post.imageUrl}
+                        src={"https://" + baseImgUrl + post.imageUrl}
                         borderRadius='lg'
                         />
                         <Stack mt='6' spacing='3'>
