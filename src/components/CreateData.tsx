@@ -71,18 +71,19 @@ const CreateData = () => {
         // If there's a passed parameter returns data then we are editing data, so we set all the inputs with the needed data
 
         if(paramData?.title) {
-            setValue("type", paramData?.type)
-            setValue("title", paramData?.title)
-            setValue("content", paramData?.content)
+            setValue("type", paramData?.type);
+            setValue("title", paramData?.title);
+            setValue("content", paramData?.content);
 
             // This field is optional
 
-            if(paramData.extraContent) setValue("extra", paramData?.extraContent)
+            if(paramData.extraContent) setValue("extra", paramData?.extraContent);
 
         } else {
-            setValue("type", "")
-            setValue("title", "")
-            setValue("content", "")
+            setValue("type", "");
+            setValue("title", "");
+            setValue("content", "");
+            setValue("extra", "");
         }
 
     }, [paramData?.title])
