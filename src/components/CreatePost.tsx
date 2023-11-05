@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, Select, Text, Textarea, useToast } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, Select, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -86,7 +86,7 @@ const CreatePost = () => {
 
     // Hook for editing post
 
-    const { data: editedPostData, isError: isEditPostError, mutate: mutateEditPost} = useEditPost(onSuccess);
+    const { data: editedPostData, isLoading: isLoadingEditPost, isError: isEditPostError, mutate: mutateEditPost} = useEditPost(onSuccess);
 
     const setExtralinkState = (index: number, linkText?: string, link?: string) => {
 
@@ -310,7 +310,7 @@ const CreatePost = () => {
                 { isErrorCreatePost && <Text color="red"> Something went wrong! </Text> }
                 { isEditPostError && <Text color="red"> Something went wrong! </Text> }
 
-                <Button type="submit" colorScheme="linkedin"> { paramData?.title ? <Text> Edit post </Text>: <Text> Create Post </Text> } </Button>
+                <Button type="submit" colorScheme="linkedin"> {isLoadingCreatePost && <Spinner />} {isLoadingEditPost && <Spinner />} { paramData?.title ? <Text> Edit post </Text>: <Text> Create Post </Text> } </Button>
 
             </FormControl>
             

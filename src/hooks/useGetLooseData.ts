@@ -12,7 +12,9 @@ const useGetLooseData = () => {
         queryFn: () => {
             return axiosInstance.get<ILooseData[]>("/data")
             .then(res => res.data)
-        }
+        },
+
+        staleTime: 10 * (60 * 1000)
     });
 
     return query;
