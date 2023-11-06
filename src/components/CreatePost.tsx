@@ -258,16 +258,16 @@ const CreatePost = () => {
                 { (errors.projectImage) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.projectImage?.message?.toString()}</AlertTitle> </Alert> }
 
                 <FormLabel> Home page </FormLabel>
-                <Select id="isFirstPage" {...register("isFirstPage")} border="1px black solid" mb={7}>
-                    <option value='true'> Yes </option>
-                    <option value='false'> No </option>
+                <Select id="isFirstPage" defaultValue={"true"} {...register("isFirstPage")} border="1px black solid" mb={7}>
+                    <option value={"true"}> Yes </option>
+                    <option value={"false"}> No </option>
                 </Select>
                 { (errors.isFirstPage) && <Alert mb={7} status='error'> <AlertIcon /> <AlertTitle> {errors.isFirstPage?.message?.toString()}</AlertTitle> </Alert> }
 
                 <FormLabel> Hide post </FormLabel>
-                <Select id="isHidden" {...register("isHidden")} border="1px black solid" mb={7}>
-                    <option value="true"> Yes </option>
-                    <option value='false'> No </option>
+                <Select id="isHidden" defaultValue={"false"} {...register("isHidden")} border="1px black solid" mb={7}>
+                    <option value={"true"}> Yes </option>
+                    <option value={"false"}> No </option>
                 </Select>
 
 
