@@ -185,10 +185,13 @@ const CreatePost = () => {
             setValue("tools", paramData.tools);
             setValue("projectImage", paramData.projectImage);
             setExtraLinks(paramData.extraLinks) 
+            setValue("isFirstPage", paramData.isFirstPage.toString());
+            setValue("isHidden", paramData.isHidden.toString())
 
             // This field is optional
 
             if(paramData.more) setValue("more", paramData?.more)
+
 
         } else {
             setValue("title", "")
@@ -198,6 +201,8 @@ const CreatePost = () => {
             setValue("link", "");
             setValue("tools", "");
             setValue("projectImage", "");
+            setValue("isFirstPage", "true");
+            setValue("isHidden", "false");
 
         } 
 
@@ -218,7 +223,7 @@ const CreatePost = () => {
             setExtraLinksPlaceholder("How many extra links")
         }
 
-    }, [paramData?.title, paramData?.extraLinks])
+    }, [paramData?.title, paramData?.extraLinks, paramData?.isHidden, paramData?.isFirstPage])
 
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
