@@ -18,7 +18,7 @@ const schema = z.object({
     description: z.string().min(8, {message: "Description too short"}),
     more: z.string().min(0),
     link: z.string().min(4, {message: "Link too short"}),
-    tools: z.string().min(8, {message: "Tools too short"}),
+    tools: z.string().min(2, {message: "Tools too short"}),
     isFirstPage: z.string(),
     isHidden: z.string(),
     extraLinkText: z.string().optional().nullable(),
