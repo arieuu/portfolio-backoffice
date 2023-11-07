@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import useDeletePost from "../hooks/useDeletePost";
 import useEditPostPartially from "../hooks/useEditPostPartially";
 import useGetPosts from "../hooks/useGetPosts";
+import { baseImgUrl } from "../types/main";
 
 
 const ListPosts = () => {
 
     const { isLoading, isError, data } = useGetPosts();
-    const baseImgUrl = "api.arielcarvalho.io/";
+    // const baseImgUrl = "api.arielcarvalho.io/";
     const toast = useToast();
 
     // Variables for button optimistic updates

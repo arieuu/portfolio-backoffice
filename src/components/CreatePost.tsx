@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, Button, Flex, FormControl, FormLabel, Heading, Input, InputGroup, Select, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, Button, Flex, Image, FormControl, FormLabel, Heading, Input, InputGroup, Select, Spinner, Text, Textarea, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -7,7 +7,7 @@ import { z } from "zod";
 import useCreatePost from "../hooks/useCreatePost";
 import useEditPost from "../hooks/useEditPost";
 import useGetOnePost from "../hooks/useGetOnePost";
-import { IExtraLink, IPost } from "../types/main";
+import { IExtraLink, IPost, baseImgUrl } from "../types/main";
 
 const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg", "svg"];
@@ -228,6 +228,9 @@ const CreatePost = () => {
     return(
         <Flex flexDirection="column" alignItems="center" justifyContent="center" p={8} px={32}>
             { paramData?.title ? <Heading mb={"24"}> Edit post </Heading> : <Heading mb={"24"}> Create post </Heading> }
+
+
+            { paramData?.title && <Image paddingBottom={"10"} src={ "https://" + baseImgUrl + paramData?.imageUrl }/> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
 

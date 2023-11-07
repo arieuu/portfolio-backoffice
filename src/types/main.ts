@@ -31,3 +31,5 @@ export interface IPost {
     projectImage: any,
     extraLinks: IExtraLink[]
 }
+
+export const baseImgUrl = "api.arielcarvalho.io/";
