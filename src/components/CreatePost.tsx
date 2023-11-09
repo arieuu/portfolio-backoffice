@@ -65,6 +65,8 @@ const CreatePost = () => {
     const checkParam = postIdParam ? postIdParam : "none"
     const { data: paramData, isLoading: isParamLoading } = useGetOnePost(checkParam);
 
+    const [ displayImg, setDisplayImg ] = useState(false);
+
     // The placeholder will show how many extra links are available when editing
 
     const [extraLinksPlaceholder, setExtraLinksPlaceholder] = useState("");
@@ -230,7 +232,9 @@ const CreatePost = () => {
             { paramData?.title ? <Heading mb={"24"}> Edit post </Heading> : <Heading mb={"24"}> Create post </Heading> }
 
 
-            { paramData?.title && <Image paddingBottom={"10"} src={ "https://" + baseImgUrl + paramData?.imageUrl }/> }
+            <Button colorScheme="blue" onClick={ () => setDisplayImg(!displayImg)} mb={10}> Display img </Button>
+
+            { displayImg && paramData?.title && <Image paddingBottom={"10"} src={ "https://" + baseImgUrl + paramData?.imageUrl }/> }
 
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
 
